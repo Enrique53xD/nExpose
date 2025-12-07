@@ -23,7 +23,7 @@ brew install cloudflared miniserve -q
 INSTALL_DIR="$HOME/.local/bin"
 mkdir -p "$INSTALL_DIR"
 
-# Your Repo URL
+# Repo URL
 REPO_URL="https://raw.githubusercontent.com/Enrique53xD/nExpose/main/expose.sh"
 
 echo "${BLUE}Downloading script...${NC}"
@@ -47,27 +47,27 @@ else
     echo "${GREEN}Path already configured.${NC}"
 fi
 
-# --- 5. SETUP WIZARD (The New Part) ---
+# --- 5. SETUP WIZARD (Fixed for Interactivity) ---
 
 echo ""
 echo "${YELLOW}--- Configuration Setup ---${NC}"
 echo "By default, nExpose uses random URLs (Quick Tunnels)."
-echo "Do you want to configure a custom domain (e.g., dev.yourname.com)?"
+echo "Do you want to configure a custom domain?"
 echo -n "${BLUE}Connect to a Cloudflare Tunnel? (y/n): ${NC}"
-read -k 1 REPLY 2>/dev/null || read -n 1 REPLY
+
+# FIX: We use < /dev/tty to force reading from keyboard, not the curl pipe
+read -n 1 REPLY < /dev/tty
 echo ""
 
 if [[ "$REPLY" == "y" || "$REPLY" == "Y" ]]; then
     echo ""
     echo "${BLUE}Enter the name of your Cloudflare Tunnel:${NC}"
-    echo "(This is the name you used in 'cloudflared tunnel create <name>')"
     echo -n "${YELLOW}> ${NC}"
-    read TUNNEL_NAME
+    
+    # FIX: Read name from keyboard
+    read TUNNEL_NAME < /dev/tty
 
     if [ ! -z "$TUNNEL_NAME" ]; then
-        # Use sed to edit the installed file in-place
-        # We look for 'TUNNEL_NAME=""' and replace it with the user's input
-        # The syntax differs slightly between Mac (BSD sed) and Linux (GNU sed)
         if [[ "$OSTYPE" == "darwin"* ]]; then
             sed -i '' "s/TUNNEL_NAME=\"\"/TUNNEL_NAME=\"$TUNNEL_NAME\"/" "$INSTALL_DIR/expose"
         else
