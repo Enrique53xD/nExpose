@@ -23,7 +23,7 @@ INSTALL_DIR="$HOME/.local/bin"
 mkdir -p "$INSTALL_DIR"
 
 # CHANGE THIS URL TO YOUR GITHUB RAW LINK
-REPO_URL="https://raw.githubusercontent.com/enrique53xd/expose/main/expose.sh"
+REPO_URL="https://raw.githubusercontent.com/Enrique53xD/nExpose/main/expose.sh"
 
 echo "${BLUE}Downloading script...${NC}"
 curl -sL "$REPO_URL" -o "$INSTALL_DIR/expose"
